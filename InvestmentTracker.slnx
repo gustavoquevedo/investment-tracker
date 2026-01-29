@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/InvestmentTracker.Api/InvestmentTracker.Api.csproj" />
+    <Project Path="src/InvestmentTracker.Domain/InvestmentTracker.Domain.csproj" />
+    <Project Path="src/InvestmentTracker.Infra/InvestmentTracker.Infra.csproj" />
+    <Project Path="src/InvestmentTracker.UI/InvestmentTracker.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/InvestmentTracker.Tests/InvestmentTracker.Tests.csproj" />
+  </Folder>
+</Solution>

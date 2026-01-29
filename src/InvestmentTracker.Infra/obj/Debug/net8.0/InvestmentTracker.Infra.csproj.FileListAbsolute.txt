@@ -1,0 +1,15 @@
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\bin\Debug\net8.0\InvestmentTracker.Infra.deps.json
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\bin\Debug\net8.0\InvestmentTracker.Infra.dll
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\bin\Debug\net8.0\InvestmentTracker.Infra.pdb
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\bin\Debug\net8.0\InvestmentTracker.Domain.dll
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\bin\Debug\net8.0\InvestmentTracker.Domain.pdb
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\InvestmentTracker.Infra.csproj.AssemblyReference.cache
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\InvestmentTracker.Infra.GeneratedMSBuildEditorConfig.editorconfig
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\InvestmentTracker.Infra.AssemblyInfoInputs.cache
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\InvestmentTracker.Infra.AssemblyInfo.cs
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\InvestmentTracker.Infra.csproj.CoreCompileInputs.cache
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\Investme.27C6D58B.Up2Date
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\InvestmentTracker.Infra.dll
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\refint\InvestmentTracker.Infra.dll
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\InvestmentTracker.Infra.pdb
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net8.0\ref\InvestmentTracker.Infra.dll

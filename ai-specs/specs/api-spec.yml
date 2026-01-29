@@ -1,0 +1,355 @@
+openapi: 3.0.0
+info:
+  title: Investment Tracker API
+  description: REST API for the Investment Tracker application, managing assets, snapshots, contributions, and tags.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local Development Server
+
+paths:
+  /assets:
+    get:
+      summary: Get all assets
+      tags: [Assets]
+      responses:
+        '200':
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+    post:
+      summary: Create a new asset
+      tags: [Assets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAssetRequest'
+      responses:
+        '201':
+          description: Asset created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+
+  /assets/{id}:
+    get:
+      summary: Get asset by ID
+      tags: [Assets]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Asset ID
+      responses:
+        '200':
+          description: Asset details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        '404':
+          description: Asset not found
+    put:
+      summary: Update an asset
+      tags: [Assets]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAssetRequest'
+      responses:
+        '200':
+          description: Asset updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+    delete:
+      summary: Delete an asset
+      tags: [Assets]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Asset deleted
+
+  /assets/{id}/snapshots:
+    get:
+      summary: Get snapshots for an asset
+      tags: [Assets, Snapshots]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: List of snapshots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Snapshot'
+    post:
+      summary: Add a snapshot to an asset
+      tags: [Assets, Snapshots]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSnapshotRequest'
+      responses:
+        '201':
+          description: Snapshot created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Snapshot'
+
+  /assets/{id}/contributions:
+    get:
+      summary: Get contributions for an asset
+      tags: [Assets, Contributions]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: List of contributions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+    post:
+      summary: Add a contribution to an asset
+      tags: [Assets, Contributions]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContributionRequest'
+      responses:
+        '201':
+          description: Contribution created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+
+  /tags:
+    get:
+      summary: Get all tags
+      tags: [Tags]
+      responses:
+        '200':
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+    post:
+      summary: Create a new tag
+      tags: [Tags]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagRequest'
+      responses:
+        '201':
+          description: Tag created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+
+  /tags/{id}:
+    delete:
+      summary: Delete a tag
+      tags: [Tags]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Tag deleted
+
+components:
+  schemas:
+    Asset:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        assetType:
+          type: string
+          enum: [Cash, ETF, Fund, Crypto, Stock, Pension]
+        isin:
+          type: string
+        ticker:
+          type: string
+        feePercentagePerYear:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, name, assetType, createdAt]
+
+    CreateAssetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        assetType:
+          type: string
+          enum: [Cash, ETF, Fund, Crypto, Stock, Pension]
+        isin:
+          type: string
+        ticker:
+          type: string
+        feePercentagePerYear:
+          type: number
+          format: double
+      required: [name, assetType]
+
+    UpdateAssetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        assetType:
+          type: string
+          enum: [Cash, ETF, Fund, Crypto, Stock, Pension]
+        isin:
+          type: string
+        ticker:
+          type: string
+        feePercentagePerYear:
+          type: number
+          format: double
+
+    Snapshot:
+      type: object
+      properties:
+        id:
+          type: integer
+        assetId:
+          type: integer
+        totalValue:
+          type: number
+          format: double
+        snapshotDate:
+          type: string
+          format: date-time
+      required: [id, assetId, totalValue, snapshotDate]
+
+    CreateSnapshotRequest:
+      type: object
+      properties:
+        totalValue:
+          type: number
+          format: double
+        snapshotDate:
+          type: string
+          format: date-time
+      required: [totalValue, snapshotDate]
+
+    Contribution:
+      type: object
+      properties:
+        id:
+          type: integer
+        assetId:
+          type: integer
+        amount:
+          type: number
+          format: double
+        dateMade:
+          type: string
+          format: date-time
+        note:
+          type: string
+      required: [id, assetId, amount, dateMade]
+
+    CreateContributionRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        dateMade:
+          type: string
+          format: date-time
+        note:
+          type: string
+      required: [amount, dateMade]
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        colorHex:
+          type: string
+      required: [id, name]
+
+    CreateTagRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        colorHex:
+          type: string
+      required: [name]
