@@ -1,20 +1,23 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Project context configuration
+# Entry point: ai-specs/AI_RULES.md (~1.8KB, ~450 tokens)
+# Full context chain: ~40KB, ~10k tokens (optimal size for carry-across)
+context:
+  # Primary entry point - compact AI-optimized index
+  entry: ai-specs/AI_RULES.md
+  
+  # Linked context files (loaded via references in entry file)
+  include:
+    - ai-specs/base/*.md        # Universal .NET 10/C# 14 standards (~22KB)
+    - ai-specs/project/*.md     # Project-specific architecture/domain (~8KB)
+    - ai-specs/project/*.yml    # API specifications (~8KB)
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+# Per-artifact rules
+rules:
+  proposal:
+    - Reference standards from ai-specs/base/ when applicable
+    - Include impact on domain model if data changes are needed
+  tasks:
+    - Break tasks into chunks of max 2 hours
+    - Each task should reference specific standards files when relevant
