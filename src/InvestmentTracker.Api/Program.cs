@@ -40,9 +40,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure Database is Created/Migrated
-using (var scope = app.Services.CreateScope())
+// Ensure Database is Created/Migrated (skip for Testing environment with in-memory DB)
+if (!app.Environment.IsEnvironment("Testing"))
 {
+    using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<InvestmentContext>();
     context.Database.Migrate();
 }

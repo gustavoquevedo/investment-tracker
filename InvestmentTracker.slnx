@@ -6,6 +6,7 @@
     <Project Path="src/InvestmentTracker.UI/InvestmentTracker.UI.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/InvestmentTracker.Api.Tests/InvestmentTracker.Api.Tests.csproj" />
     <Project Path="tests/InvestmentTracker.Tests/InvestmentTracker.Tests.csproj" />
   </Folder>
 </Solution>
