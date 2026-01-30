@@ -63,24 +63,43 @@ public class PortfolioService : IPortfolioService
         
         decimal totalInvested = 0;
         decimal totalValue = 0;
+        decimal totalFees = 0;
 
         foreach (var asset in assets)
         {
             var contributions = await _contributionRepository.GetByAssetIdAsync(asset.Id);
-            totalInvested += contributions.Sum(c => c.Amount);
+            var contributionsList = contributions.ToList();
+            totalInvested += contributionsList.Sum(c => c.Amount);
 
             var latestSnapshot = await _snapshotRepository.GetLatestByAssetIdAsync(asset.Id);
             if (latestSnapshot != null)
             {
                 totalValue += latestSnapshot.TotalValue;
+                
+                // Calculate fees if we have contributions and a snapshot
+                if (contributionsList.Count > 0 && asset.FeePercentagePerYear > 0)
+                {
+                    var earliestContributionDate = contributionsList.Min(c => c.DateMade);
+                    var principal = contributionsList.Sum(c => c.Amount);
+                    var fee = _feeCalculator.CalculateFee(
+                        principal,
+                        asset.FeePercentagePerYear,
+                        earliestContributionDate,
+                        latestSnapshot.SnapshotDate);
+                    totalFees += fee;
+                }
             }
         }
 
+        var totalPnL = totalValue - totalInvested;
+        
         return new PortfolioSummary
         {
             TotalInvested = totalInvested,
             TotalValue = totalValue,
-            TotalPnL = totalValue - totalInvested
+            TotalPnL = totalPnL,
+            TotalFees = totalFees,
+            NetPnL = totalPnL - totalFees
         };
     }
 }
