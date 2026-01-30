@@ -70,3 +70,4 @@ d:\repo\2026\investment-tracker\src\InvestmentTracker.Api\obj\Debug\net10.0\refi
 d:\repo\2026\investment-tracker\src\InvestmentTracker.Api\obj\Debug\net10.0\InvestmentTracker.Api.pdb
 d:\repo\2026\investment-tracker\src\InvestmentTracker.Api\obj\Debug\net10.0\InvestmentTracker.Api.genruntimeconfig.cache
 d:\repo\2026\investment-tracker\src\InvestmentTracker.Api\obj\Debug\net10.0\ref\InvestmentTracker.Api.dll
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Api\obj\Debug\net10.0\InvestmentTracker.Api.sourcelink.json

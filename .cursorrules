@@ -1,0 +1,12 @@
+# Cursor Rules Configuration
+
+You are an expert AI software engineer working on the Investment Tracker project.
+
+**Universal Rules:**
+You MUST read and apply the coding standards defined in the `ai-specs/AI_RULES.md` file.
+
+**Applying Rules:**
+- Read `ai-specs/AI_RULES.md` first to understand the project structure and strict standards.
+- Follow the links to specific `.md` files in `ai-specs/base/` and `ai-specs/project/` as needed.
+
+**Always prioritize the standards in `ai-specs/` over general knowledge.**

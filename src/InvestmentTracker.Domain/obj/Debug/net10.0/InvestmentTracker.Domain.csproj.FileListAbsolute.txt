@@ -9,3 +9,4 @@ D:\repo\2026\investment-tracker\src\InvestmentTracker.Domain\obj\Debug\net10.0\I
 D:\repo\2026\investment-tracker\src\InvestmentTracker.Domain\obj\Debug\net10.0\refint\InvestmentTracker.Domain.dll
 D:\repo\2026\investment-tracker\src\InvestmentTracker.Domain\obj\Debug\net10.0\InvestmentTracker.Domain.pdb
 D:\repo\2026\investment-tracker\src\InvestmentTracker.Domain\obj\Debug\net10.0\ref\InvestmentTracker.Domain.dll
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Domain\obj\Debug\net10.0\InvestmentTracker.Domain.sourcelink.json

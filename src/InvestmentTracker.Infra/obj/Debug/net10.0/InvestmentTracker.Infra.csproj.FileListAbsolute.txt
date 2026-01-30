@@ -15,3 +15,4 @@ D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net10.0\In
 D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net10.0\ref\InvestmentTracker.Infra.dll
 d:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\bin\Debug\net10.0\InvestmentTracker.Infra.runtimeconfig.json
 d:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net10.0\InvestmentTracker.Infra.genruntimeconfig.cache
+D:\repo\2026\investment-tracker\src\InvestmentTracker.Infra\obj\Debug\net10.0\InvestmentTracker.Infra.sourcelink.json

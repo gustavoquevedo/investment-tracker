@@ -13,6 +13,7 @@
         "packagesPath": "C:\\Users\\gustavo.quevedo\\.nuget\\packages\\",
         "outputPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Api\\obj\\",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
@@ -62,16 +63,34 @@
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[10.1.0, )"
+              "version": "[10.1.0, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "coverlet.collector": "6.0.0",
+            "FluentAssertions": "7.0.0",
+            "Microsoft.AspNetCore.OpenApi": "10.0.2",
+            "Microsoft.EntityFrameworkCore": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.2",
+            "Microsoft.EntityFrameworkCore.InMemory": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Sqlite": "10.0.2",
+            "Microsoft.Extensions.Hosting": "10.0.2",
+            "Microsoft.NET.Test.Sdk": "17.6.0",
+            "Moq": "4.20.72",
+            "Swashbuckle.AspNetCore": "10.1.0",
+            "xunit.runner.visualstudio": "3.0.2",
+            "xunit.v3": "1.0.0"
           },
           "imports": [
             "net461",
@@ -519,6 +538,7 @@
         "packagesPath": "C:\\Users\\gustavo.quevedo\\.nuget\\packages\\",
         "outputPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
@@ -558,6 +578,21 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
+          "centralPackageVersions": {
+            "coverlet.collector": "6.0.0",
+            "FluentAssertions": "7.0.0",
+            "Microsoft.AspNetCore.OpenApi": "10.0.2",
+            "Microsoft.EntityFrameworkCore": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.2",
+            "Microsoft.EntityFrameworkCore.InMemory": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Sqlite": "10.0.2",
+            "Microsoft.Extensions.Hosting": "10.0.2",
+            "Microsoft.NET.Test.Sdk": "17.6.0",
+            "Moq": "4.20.72",
+            "Swashbuckle.AspNetCore": "10.1.0",
+            "xunit.runner.visualstudio": "3.0.2",
+            "xunit.v3": "1.0.0"
+          },
           "imports": [
             "net461",
             "net462",
@@ -861,6 +896,7 @@
         "packagesPath": "C:\\Users\\gustavo.quevedo\\.nuget\\packages\\",
         "outputPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\obj\\",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
@@ -907,18 +943,36 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "coverlet.collector": "6.0.0",
+            "FluentAssertions": "7.0.0",
+            "Microsoft.AspNetCore.OpenApi": "10.0.2",
+            "Microsoft.EntityFrameworkCore": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.2",
+            "Microsoft.EntityFrameworkCore.InMemory": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Sqlite": "10.0.2",
+            "Microsoft.Extensions.Hosting": "10.0.2",
+            "Microsoft.NET.Test.Sdk": "17.6.0",
+            "Moq": "4.20.72",
+            "Swashbuckle.AspNetCore": "10.1.0",
+            "xunit.runner.visualstudio": "3.0.2",
+            "xunit.v3": "1.0.0"
           },
           "imports": [
             "net461",

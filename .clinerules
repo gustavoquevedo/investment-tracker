@@ -1,0 +1,11 @@
+# Roo Code / Cline Rules
+
+**Project Standards (IMPORTANT)**
+You are working on the Investment Tracker project.
+All coding standards and rules are centralized in `ai-specs/AI_RULES.md`.
+
+**Rule Application:**
+You MUST read `ai-specs/AI_RULES.md` to get context and access the specific rules.
+
+**Development Workflow:**
+Use the `openspec` CLI and `.commands/` for structured development changes.

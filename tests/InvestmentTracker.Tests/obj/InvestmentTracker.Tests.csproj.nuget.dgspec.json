@@ -1,18 +1,19 @@
 {
   "format": 1,
   "restore": {
-    "d:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj": {}
+    "D:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj": {}
   },
   "projects": {
-    "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj": {
+    "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj",
+        "projectUniqueName": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj",
         "projectName": "InvestmentTracker.Domain",
-        "projectPath": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj",
+        "projectPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj",
         "packagesPath": "C:\\Users\\gustavo.quevedo\\.nuget\\packages\\",
-        "outputPath": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\obj\\",
+        "outputPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
@@ -52,6 +53,21 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
+          "centralPackageVersions": {
+            "coverlet.collector": "6.0.0",
+            "FluentAssertions": "7.0.0",
+            "Microsoft.AspNetCore.OpenApi": "10.0.2",
+            "Microsoft.EntityFrameworkCore": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.2",
+            "Microsoft.EntityFrameworkCore.InMemory": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Sqlite": "10.0.2",
+            "Microsoft.Extensions.Hosting": "10.0.2",
+            "Microsoft.NET.Test.Sdk": "17.6.0",
+            "Moq": "4.20.72",
+            "Swashbuckle.AspNetCore": "10.1.0",
+            "xunit.runner.visualstudio": "3.0.2",
+            "xunit.v3": "1.0.0"
+          },
           "imports": [
             "net461",
             "net462",
@@ -346,15 +362,16 @@
         }
       }
     },
-    "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj": {
+    "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj",
+        "projectUniqueName": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj",
         "projectName": "InvestmentTracker.Infra",
-        "projectPath": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj",
+        "projectPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj",
         "packagesPath": "C:\\Users\\gustavo.quevedo\\.nuget\\packages\\",
-        "outputPath": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\obj\\",
+        "outputPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\obj\\",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
@@ -377,8 +394,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj": {
-                "projectPath": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj"
+              "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj": {
+                "projectPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj"
               }
             }
           }
@@ -401,18 +418,36 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "coverlet.collector": "6.0.0",
+            "FluentAssertions": "7.0.0",
+            "Microsoft.AspNetCore.OpenApi": "10.0.2",
+            "Microsoft.EntityFrameworkCore": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.2",
+            "Microsoft.EntityFrameworkCore.InMemory": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Sqlite": "10.0.2",
+            "Microsoft.Extensions.Hosting": "10.0.2",
+            "Microsoft.NET.Test.Sdk": "17.6.0",
+            "Moq": "4.20.72",
+            "Swashbuckle.AspNetCore": "10.1.0",
+            "xunit.runner.visualstudio": "3.0.2",
+            "xunit.v3": "1.0.0"
           },
           "imports": [
             "net461",
@@ -708,15 +743,16 @@
         }
       }
     },
-    "d:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj": {
+    "D:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj",
+        "projectUniqueName": "D:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj",
         "projectName": "InvestmentTracker.Tests",
-        "projectPath": "d:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj",
+        "projectPath": "D:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\InvestmentTracker.Tests.csproj",
         "packagesPath": "C:\\Users\\gustavo.quevedo\\.nuget\\packages\\",
-        "outputPath": "d:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\obj\\",
+        "outputPath": "D:\\repo\\2026\\investment-tracker\\tests\\InvestmentTracker.Tests\\obj\\",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
@@ -739,11 +775,11 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj": {
-                "projectPath": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj"
+              "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj": {
+                "projectPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Domain\\InvestmentTracker.Domain.csproj"
               },
-              "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj": {
-                "projectPath": "d:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj"
+              "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj": {
+                "projectPath": "D:\\repo\\2026\\investment-tracker\\src\\InvestmentTracker.Infra\\InvestmentTracker.Infra.csproj"
               }
             }
           }
@@ -764,34 +800,60 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[7.0.0, )",
+              "versionCentrallyManaged": true
+            },
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.2, )",
+              "versionCentrallyManaged": true
             },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
-              "version": "[17.6.0, )"
+              "version": "[17.6.0, )",
+              "versionCentrallyManaged": true
             },
             "Moq": {
               "target": "Package",
-              "version": "[4.20.72, )"
+              "version": "[4.20.72, )",
+              "versionCentrallyManaged": true
             },
             "coverlet.collector": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.0, )"
-            },
-            "xunit": {
-              "target": "Package",
-              "version": "[2.4.2, )"
+              "version": "[6.0.0, )",
+              "versionCentrallyManaged": true
             },
             "xunit.runner.visualstudio": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[2.4.5, )"
+              "version": "[3.0.2, )",
+              "versionCentrallyManaged": true
+            },
+            "xunit.v3": {
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "coverlet.collector": "6.0.0",
+            "FluentAssertions": "7.0.0",
+            "Microsoft.AspNetCore.OpenApi": "10.0.2",
+            "Microsoft.EntityFrameworkCore": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.2",
+            "Microsoft.EntityFrameworkCore.InMemory": "10.0.2",
+            "Microsoft.EntityFrameworkCore.Sqlite": "10.0.2",
+            "Microsoft.Extensions.Hosting": "10.0.2",
+            "Microsoft.NET.Test.Sdk": "17.6.0",
+            "Moq": "4.20.72",
+            "Swashbuckle.AspNetCore": "10.1.0",
+            "xunit.runner.visualstudio": "3.0.2",
+            "xunit.v3": "1.0.0"
           },
           "imports": [
             "net461",
