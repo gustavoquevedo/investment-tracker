@@ -7,6 +7,7 @@ namespace InvestmentTracker.Domain.Enums
         Fund,
         Crypto,
         Stock,
-        Pension
+        Pension,
+        Bond
     }
 }

@@ -98,8 +98,8 @@ Create tests in `tests/InvestmentTracker.Api.Tests/`:
 
 In `src/InvestmentTracker.Client/`:
 
-- [ ] `npm install recharts`
-- [ ] Verify TypeScript types available
+- [x] `npm install recharts`
+- [x] Verify TypeScript types available
 
 ---
 
@@ -108,10 +108,10 @@ In `src/InvestmentTracker.Client/`:
 
 Create in `src/InvestmentTracker.Client/src/api/`:
 
-- [ ] `usePortfolioSummary.ts` - React Query hook for summary
-- [ ] `usePortfolioHistory.ts` - Hook with date range params
-- [ ] `usePortfolioAllocation.ts` - Hook for allocation data
-- [ ] `usePortfolioReturns.ts` - Hook for returns data
+- [x] `usePortfolioSummary.ts` - React Query hook for summary
+- [x] `usePortfolioHistory.ts` - Hook with date range params
+- [x] `usePortfolioAllocation.ts` - Hook for allocation data
+- [x] `usePortfolioReturns.ts` - Hook for returns data
 
 ---
 
@@ -120,9 +120,9 @@ Create in `src/InvestmentTracker.Client/src/api/`:
 
 Create in `src/InvestmentTracker.Client/src/components/charts/`:
 
-- [ ] `PortfolioValueChart.tsx` - Line chart for value over time
-- [ ] `AllocationChart.tsx` - Pie/donut chart for allocation
-- [ ] `PnLTrendChart.tsx` - Area chart for P&L trend
+- [x] `PortfolioValueChart.tsx` - Line chart for value over time
+- [x] `AllocationChart.tsx` - Pie/donut chart for allocation
+- [x] `PnLTrendChart.tsx` - Area chart for P&L trend
 
 ---
 
@@ -131,12 +131,12 @@ Create in `src/InvestmentTracker.Client/src/components/charts/`:
 
 Create in `src/InvestmentTracker.Client/src/pages/`:
 
-- [ ] `DashboardPage.tsx` with:
+- [x] `DashboardPage.tsx` with:
   - Summary cards (total value, P&L, etc.)
   - Chart grid layout
   - Period selector
   - Loading and empty states
-- [ ] Add route to dashboard
+- [x] Add route to dashboard
 
 ---
 
