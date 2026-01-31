@@ -10,64 +10,80 @@ alwaysApply: true
 
 ```text
 src/
-  InvestmentTracker.Domain/   # Entities, Interfaces, Domain Services
-  InvestmentTracker.Infra/    # EF Core DbContext, Repositories Implementation
-  InvestmentTracker.UI/       # Console Application / API Entry Point
+  InvestmentTracker.Api/      # Features (Vertical Slices), Entry Point
+  InvestmentTracker.Domain/   # Entities, Interfaces, Pure Logic Services
+  InvestmentTracker.Infra/    # EF Core DbContext, Data Migrations
 tests/
-  InvestmentTracker.Tests/    # Unit and Integration Tests
+  InvestmentTracker.Api.Tests # Integration Tests
+  InvestmentTracker.Domain.Tests # Unit Tests
 ```
 
 ## Layer Mapping
 
-This project uses the Clean Architecture + VSA hybrid described in the base architecture standards.
+This project follows **Vertical Slice Architecture (VSA)** for the API layer and **Clean Architecture** principles for core domain logic.
+
+### API Layer (`src/InvestmentTracker.Api`)
+
+Organized by **Feature Slices** using the **subdirectory pattern** in `Features/` folder.
+
+**Structure:**
+```text
+Features/
+├── Assets/
+│   ├── GetAssets/
+│   │   ├── GetAssetsEndpoint.cs
+│   │   └── GetAssetsDtos.cs
+│   ├── CreateAsset/ ...
+│   ├── ManageSnapshots/ ...
+│   └── AssetsEndpoints.cs
+├── Portfolio/
+│   ├── GetSummary/
+│   │   ├── GetSummaryEndpoint.cs
+│   │   └── SummaryDtos.cs
+│   └── PortfolioEndpoints.cs
+├── Tags/ ...
+└── Common/
+    └── TagDto.cs
+```
+
+**Key Principles:**
+- Each endpoint is in its **own subdirectory** (e.g., `GetAssets/`)
+- Separate `<Action>Endpoint.cs` and `<Action>Dtos.cs` files per slice
+- **Data Access**: Slices inject `InvestmentContext` directly (no repositories for simple CRUD)
+- **Registration**: Extension methods per feature group in `<Group>Endpoints.cs`
+
+**Dependencies**: Domain, Infrastructure
 
 ### Domain Layer (`src/InvestmentTracker.Domain`)
 
-Contains:
+Contains pure business logic and core concepts:
 - **Entities**: `Asset`, `Snapshot`, `Contribution`, `Tag`, `AssetTag`
-- **Repository Interfaces**: `IAssetRepository`, `ISnapshotRepository`, etc.
-- **Domain Services**: `FeeCalculator`, `PortfolioService`
+- **Interfaces**: Strategy interfaces (e.g., `IFeeCalculator`, `IReturnCalculator`)
+- **Domain Services**: Pure logic implementations (e.g., `FeeCalculator`, `ReturnCalculator`)
 - **Enums**: `AssetType`
 
 **Dependencies**: None (Pure C#)
 
 ### Infrastructure Layer (`src/InvestmentTracker.Infra`)
 
-Contains:
-- **DbContext**: `InvestmentTrackerDbContext`
-- **Repository Implementations**: `AssetRepository`, etc.
-- **Entity Configurations**: `IEntityTypeConfiguration<T>` implementations
+Focuses on persistence:
+- **DbContext**: `InvestmentContext`
+- **Entity Configurations**: Fluent API `IEntityTypeConfiguration<T>` implementations
 - **Migrations**: EF Core migrations
 
 **Dependencies**: Domain, Entity Framework Core
 
-### UI Layer (`src/InvestmentTracker.UI`)
-
-Contains:
-- Application entry point (Console or API)
-- Dependency injection configuration
-- Startup logic
-
-**Dependencies**: Domain, Infrastructure
-
 ## Database
 
-- **Local Development**: SQLite (`investments.db`)
+- **Local Development**: SQLite (`InvestmentTracker.db`)
 - **Production**: PostgreSQL
 
 ## EF Core Commands
 
 ```bash
 # Add migration
-dotnet ef migrations add <Name> --project src/InvestmentTracker.Infra --startup-project src/InvestmentTracker.UI
+dotnet ef migrations add <Name> --project src/InvestmentTracker.Infra --startup-project src/InvestmentTracker.Api
 
 # Update database
-dotnet ef database update --project src/InvestmentTracker.Infra --startup-project src/InvestmentTracker.UI
+dotnet ef database update --project src/InvestmentTracker.Infra --startup-project src/InvestmentTracker.Api
 ```
-
-## Test Project (`tests/InvestmentTracker.Tests`)
-
-Organized by layer:
-- `Domain/` - Entity and domain service tests
-- `Services/` - Service layer tests
-- `Infra/` - Repository and integration tests

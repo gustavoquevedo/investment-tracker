@@ -1,14 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using InvestmentTracker.Infra.Data;
 using InvestmentTracker.Domain.Interfaces;
-using InvestmentTracker.Infra.Repositories;
+// using InvestmentTracker.Infra.Repositories;
 using InvestmentTracker.Domain.Services;
+using InvestmentTracker.Api.Features.Assets;
+using InvestmentTracker.Api.Features.Portfolio;
+using InvestmentTracker.Api.Features.Tags;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
+builder.Services.AddAuthorization();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -17,15 +21,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<InvestmentContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Repositories
-builder.Services.AddScoped<IAssetRepository, AssetRepository>();
-builder.Services.AddScoped<ISnapshotRepository, SnapshotRepository>();
-builder.Services.AddScoped<IContributionRepository, ContributionRepository>();
-builder.Services.AddScoped<ITagRepository, TagRepository>();
+// Repositories (Retired in favor of direct DbContext access in VSA)
+// builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+// builder.Services.AddScoped<ISnapshotRepository, SnapshotRepository>();
+// builder.Services.AddScoped<IContributionRepository, ContributionRepository>();
+// builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 // Services
 builder.Services.AddScoped<IFeeCalculator, FeeCalculator>();
-builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<IReturnCalculator, ReturnCalculator>();
+// builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 
 var app = builder.Build();
 
@@ -38,7 +43,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
-app.MapControllers();
+// Feature Endpoints (VSA)
+app.MapAssetEndpoints();
+app.MapPortfolioEndpoints();
+app.MapTagEndpoints();
 
 // Ensure Database is Created/Migrated (skip for Testing environment with in-memory DB)
 if (!app.Environment.IsEnvironment("Testing"))
@@ -50,3 +58,5 @@ if (!app.Environment.IsEnvironment("Testing"))
 }
 
 app.Run();
+
+public partial class Program { }

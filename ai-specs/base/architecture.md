@@ -14,19 +14,50 @@ This document describes the preferred architectural approach: a hybrid of **Vert
 
 ### When to Use
 
-- **Preferred for Web APIs**: Group code by feature (e.g., `PlaceOrder` folder containing DTOs, Logic, and Endpoint)
+- **Preferred for Web APIs**: Group code by feature in subdirectories
 - **Benefits**: Reduces file hopping, aligns with Minimal APIs, improves developer velocity
+
+### Folder Structure
+
+Each endpoint gets its **own subdirectory** with separate files:
+
+```text
+Features/
+├── <FeatureGroup>/
+│   ├── <Action>/
+│   │   ├── <Action>Endpoint.cs     # Route + Handler logic
+│   │   └── <Action>Dtos.cs         # Request/Response DTOs
+│   ├── <AnotherAction>/ ...
+│   └── <FeatureGroup>Endpoints.cs  # Registration extension method
+└── Common/
+    └── SharedDto.cs                # Shared types (use sparingly)
+```
+
+**Example:**
+```text
+Features/
+├── Assets/
+│   ├── GetAssets/
+│   │   ├── GetAssetsEndpoint.cs
+│   │   └── GetAssetsDtos.cs
+│   ├── CreateAsset/
+│   │   ├── CreateAssetEndpoint.cs
+│   │   └── CreateAssetDtos.cs
+│   └── AssetsEndpoints.cs
+└── Common/
+    └── TagDto.cs
+```
 
 ### Sharing Strategy
 
 | What | Strategy |
 |------|----------|
 | **Entities** | ALWAYS SHARE. Core business truths belong in the Domain layer. |
-| **DTOs** | AGGRESSIVELY DUPLICATE. Do not share DTOs between features to avoid tight coupling. "Duplication is cheaper than the wrong abstraction." |
+| **DTOs** | AGGRESSIVELY DUPLICATE. Do not share DTOs between features to avoid tight coupling. \"Duplication is cheaper than the wrong abstraction.\" |
 | **Data Logic** | Use **Extension Methods** on `IQueryable` for complex queries instead of Repositories |
 | **Shared Biz Logic** | Use **Domain Services** for universal logic (e.g., Tax calculation) |
 
-### The "Rule of Three" for Refactoring
+### The \"Rule of Three\" for Refactoring
 
 1. Write the code in Slice A (no sharing)
 2. Copy it to Slice B (accept duplication)

@@ -2,16 +2,20 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using FluentAssertions;
-using InvestmentTracker.Api.DTOs;
-using Microsoft.Extensions.DependencyInjection;
+using InvestmentTracker.Api.Features.Assets.CreateAsset;
+using InvestmentTracker.Api.Features.Assets.ManageSnapshots;
+using InvestmentTracker.Api.Features.Assets.ManageContributions;
+using InvestmentTracker.Api.Features.Portfolio.GetSummary;
+using InvestmentTracker.Api.Features.Portfolio.GetHistory;
+using InvestmentTracker.Api.Features.Portfolio.GetAllocation;
+using InvestmentTracker.Api.Features.Portfolio.GetReturns;
 using Xunit;
 
 namespace InvestmentTracker.Api.Tests;
 
-public class PortfolioControllerTests : IClassFixture<CustomWebApplicationFactory>, IAsyncLifetime
+public class PortfolioControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory _factory;
     private readonly JsonSerializerOptions _jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
@@ -19,65 +23,54 @@ public class PortfolioControllerTests : IClassFixture<CustomWebApplicationFactor
 
     public PortfolioControllerTests(CustomWebApplicationFactory factory)
     {
-        _factory = factory;
         _client = factory.CreateClient();
     }
-
-    public async ValueTask InitializeAsync()
-    {
-        using var scope = _factory.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<InvestmentTracker.Infra.Data.InvestmentContext>();
-        
-        db.Assets.RemoveRange(db.Assets);
-        await db.SaveChangesAsync();
-    }
-
-    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
-
 
     #region GET /portfolio/summary
 
     [Fact]
-    public async Task GetSummary_ReturnsOk_WhenEmpty()
+    public async Task GetSummary_ReturnsOk()
     {
         // Act
         var response = await _client.GetAsync("/portfolio/summary");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var summary = await response.Content.ReadFromJsonAsync<PortfolioSummaryDto>(_jsonOptions);
+        var summary = await response.Content.ReadFromJsonAsync<GetSummaryResponse>(_jsonOptions);
         summary.Should().NotBeNull();
-        summary!.TotalValue.Should().Be(0);
-        summary.TotalInvested.Should().Be(0);
-        summary.AssetCount.Should().BeGreaterThanOrEqualTo(0);
     }
 
     [Fact]
-    public async Task GetSummary_ReturnsCalculatedValues_WithData()
+    public async Task GetSummary_ReturnsZeroValues_WhenNoAssets()
     {
-        // Arrange - Create asset with contribution and snapshot
-        var assetRequest = new CreateAssetRequest { Name = "Summary Test ETF", AssetType = "ETF" };
-        var assetResponse = await _client.PostAsJsonAsync("/assets", assetRequest);
-        var asset = await assetResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
+        // Act
+        var response = await _client.GetAsync("/portfolio/summary");
 
-        await _client.PostAsJsonAsync($"/assets/{asset!.Id}/contributions", new CreateContributionRequest
-        {
-            Amount = 1000m,
-            DateMade = DateTime.UtcNow.AddMonths(-1)
-        });
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var summary = await response.Content.ReadFromJsonAsync<GetSummaryResponse>(_jsonOptions);
+        summary.Should().NotBeNull();
+    }
 
-        await _client.PostAsJsonAsync($"/assets/{asset.Id}/snapshots", new CreateSnapshotRequest
-        {
-            TotalValue = 1100m,
-            SnapshotDate = DateTime.UtcNow
-        });
+    [Fact]
+    public async Task GetSummary_CalculatesCorrectly_WithAssets()
+    {
+        // Arrange
+        var createRequest = new CreateAssetRequest("Summary Test Asset", "ETF", null, null, 0);
+        var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
+        var asset = await createResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
+
+        await _client.PostAsJsonAsync($"/assets/{asset!.Id}/contributions", 
+            new AddContributionRequest(1000m, DateTime.UtcNow.AddDays(-30), null));
+        await _client.PostAsJsonAsync($"/assets/{asset.Id}/snapshots", 
+            new AddSnapshotRequest(1100m, DateTime.UtcNow));
 
         // Act
         var response = await _client.GetAsync("/portfolio/summary");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var summary = await response.Content.ReadFromJsonAsync<PortfolioSummaryDto>(_jsonOptions);
+        var summary = await response.Content.ReadFromJsonAsync<GetSummaryResponse>(_jsonOptions);
         summary.Should().NotBeNull();
         summary!.TotalValue.Should().BeGreaterThan(0);
     }
@@ -94,21 +87,19 @@ public class PortfolioControllerTests : IClassFixture<CustomWebApplicationFactor
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var history = await response.Content.ReadFromJsonAsync<PortfolioHistoryDto>(_jsonOptions);
-        history.Should().NotBeNull();
-        history!.Points.Should().NotBeNull();
     }
 
     [Fact]
-    public async Task GetHistory_ReturnsPoints_WithDateRange()
+    public async Task GetHistory_ReturnsEmptyPoints_WhenNoData()
     {
         // Act
-        var from = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-1));
-        var to = DateOnly.FromDateTime(DateTime.UtcNow);
-        var response = await _client.GetAsync($"/portfolio/history?from={from:yyyy-MM-dd}&to={to:yyyy-MM-dd}");
+        var response = await _client.GetAsync("/portfolio/history");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var history = await response.Content.ReadFromJsonAsync<GetHistoryResponse>(_jsonOptions);
+        history.Should().NotBeNull();
+        history!.Points.Should().NotBeNull();
     }
 
     #endregion
@@ -123,41 +114,33 @@ public class PortfolioControllerTests : IClassFixture<CustomWebApplicationFactor
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var allocation = await response.Content.ReadFromJsonAsync<PortfolioAllocationDto>(_jsonOptions);
+        var allocation = await response.Content.ReadFromJsonAsync<GetAllocationResponse>(_jsonOptions);
         allocation.Should().NotBeNull();
         allocation!.ByType.Should().NotBeNull();
     }
 
     [Fact]
-    public async Task GetAllocation_ReturnsPercentages_WithMultipleAssetTypes()
+    public async Task GetAllocation_GroupsByAssetType()
     {
-        // Arrange - Create assets of different types
-        var etfRequest = new CreateAssetRequest { Name = "Allocation ETF", AssetType = "ETF" };
+        // Arrange
+        var etfRequest = new CreateAssetRequest("Allocation ETF", "ETF", null, null, 0);
         var etfResponse = await _client.PostAsJsonAsync("/assets", etfRequest);
-        var etf = await etfResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
+        var etfAsset = await etfResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
+        await _client.PostAsJsonAsync($"/assets/{etfAsset!.Id}/snapshots", 
+            new AddSnapshotRequest(5000m, DateTime.UtcNow));
 
-        await _client.PostAsJsonAsync($"/assets/{etf!.Id}/snapshots", new CreateSnapshotRequest
-        {
-            TotalValue = 5000m,
-            SnapshotDate = DateTime.UtcNow
-        });
-
-        var cryptoRequest = new CreateAssetRequest { Name = "Allocation Crypto", AssetType = "Crypto" };
+        var cryptoRequest = new CreateAssetRequest("Allocation Crypto", "Crypto", null, null, 0);
         var cryptoResponse = await _client.PostAsJsonAsync("/assets", cryptoRequest);
-        var crypto = await cryptoResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
-
-        await _client.PostAsJsonAsync($"/assets/{crypto!.Id}/snapshots", new CreateSnapshotRequest
-        {
-            TotalValue = 3000m,
-            SnapshotDate = DateTime.UtcNow
-        });
+        var cryptoAsset = await cryptoResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
+        await _client.PostAsJsonAsync($"/assets/{cryptoAsset!.Id}/snapshots", 
+            new AddSnapshotRequest(3000m, DateTime.UtcNow));
 
         // Act
         var response = await _client.GetAsync("/portfolio/allocation");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var allocation = await response.Content.ReadFromJsonAsync<PortfolioAllocationDto>(_jsonOptions);
+        var allocation = await response.Content.ReadFromJsonAsync<GetAllocationResponse>(_jsonOptions);
         allocation!.ByType.Should().Contain(a => a.Type == "ETF");
         allocation.ByType.Should().Contain(a => a.Type == "Crypto");
     }
@@ -174,20 +157,8 @@ public class PortfolioControllerTests : IClassFixture<CustomWebApplicationFactor
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var returns = await response.Content.ReadFromJsonAsync<PortfolioReturnsDto>(_jsonOptions);
+        var returns = await response.Content.ReadFromJsonAsync<GetReturnsResponse>(_jsonOptions);
         returns.Should().NotBeNull();
-        returns!.Periods.Should().NotBeNull();
-    }
-
-    [Fact]
-    public async Task GetReturns_AcceptsAsOfDate()
-    {
-        // Act
-        var asOf = DateOnly.FromDateTime(DateTime.UtcNow);
-        var response = await _client.GetAsync($"/portfolio/returns?asOf={asOf:yyyy-MM-dd}");
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     #endregion

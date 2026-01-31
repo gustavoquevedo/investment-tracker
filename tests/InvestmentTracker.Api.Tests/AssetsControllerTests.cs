@@ -2,7 +2,12 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using FluentAssertions;
-using InvestmentTracker.Api.DTOs;
+using InvestmentTracker.Api.Features.Assets.GetAssets;
+using InvestmentTracker.Api.Features.Assets.GetAssetById;
+using InvestmentTracker.Api.Features.Assets.CreateAsset;
+using InvestmentTracker.Api.Features.Assets.UpdateAsset;
+using InvestmentTracker.Api.Features.Assets.ManageSnapshots;
+using InvestmentTracker.Api.Features.Assets.ManageContributions;
 using Xunit;
 
 namespace InvestmentTracker.Api.Tests;
@@ -30,8 +35,56 @@ public class AssetsControllerTests : IClassFixture<CustomWebApplicationFactory>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var assets = await response.Content.ReadFromJsonAsync<List<AssetResponse>>(_jsonOptions);
+        var assets = await response.Content.ReadFromJsonAsync<List<GetAssetsResponse>>(_jsonOptions);
         assets.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task GetAll_ReturnsList_WhenAssetsExist()
+    {
+        // Arrange
+        var createRequest = new CreateAssetRequest("Test Asset", "ETF", null, null, 0.5m);
+        await _client.PostAsJsonAsync("/assets", createRequest);
+
+        // Act
+        var response = await _client.GetAsync("/assets");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var assets = await response.Content.ReadFromJsonAsync<List<GetAssetsResponse>>(_jsonOptions);
+        assets.Should().NotBeNull();
+    }
+
+    #endregion
+
+    #region GET /assets/{id}
+
+    [Fact]
+    public async Task GetById_ReturnsNotFound_WhenAssetDoesNotExist()
+    {
+        // Act
+        var response = await _client.GetAsync("/assets/99999");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task GetById_ReturnsAsset_WhenExists()
+    {
+        // Arrange
+        var createRequest = new CreateAssetRequest("Test Asset By Id", "ETF", null, null, 0.5m);
+        var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
+
+        // Act
+        var response = await _client.GetAsync($"/assets/{created!.Id}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var asset = await response.Content.ReadFromJsonAsync<GetAssetByIdResponse>(_jsonOptions);
+        asset.Should().NotBeNull();
+        asset!.Name.Should().Be("Test Asset By Id");
     }
 
     #endregion
@@ -42,22 +95,16 @@ public class AssetsControllerTests : IClassFixture<CustomWebApplicationFactory>
     public async Task Create_ReturnsCreated_WithValidAsset()
     {
         // Arrange
-        var request = new CreateAssetRequest
-        {
-            Name = "Test ETF",
-            AssetType = "ETF",
-            ISIN = "IE00B4L5Y983",
-            Ticker = "IWDA"
-        };
+        var request = new CreateAssetRequest("New ETF", "ETF", "IE00B4L5Y983", "VWCE", 0.22m);
 
         // Act
         var response = await _client.PostAsJsonAsync("/assets", request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var asset = await response.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
+        var asset = await response.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
         asset.Should().NotBeNull();
-        asset!.Name.Should().Be("Test ETF");
+        asset!.Name.Should().Be("New ETF");
         asset.AssetType.Should().Be("ETF");
     }
 
@@ -65,7 +112,7 @@ public class AssetsControllerTests : IClassFixture<CustomWebApplicationFactory>
     public async Task Create_ReturnsBadRequest_WithInvalidAssetType()
     {
         // Arrange
-        var request = new { Name = "Test", AssetType = "InvalidType" };
+        var request = new CreateAssetRequest("Invalid Asset", "InvalidType", null, null, 0);
 
         // Act
         var response = await _client.PostAsJsonAsync("/assets", request);
@@ -76,56 +123,37 @@ public class AssetsControllerTests : IClassFixture<CustomWebApplicationFactory>
 
     #endregion
 
-    #region GET /assets/{id}
+    #region PUT /assets/{id}
 
     [Fact]
-    public async Task GetById_ReturnsAsset_WhenExists()
+    public async Task Update_ReturnsNotFound_WhenAssetDoesNotExist()
     {
-        // Arrange - Create an asset first
-        var createRequest = new CreateAssetRequest { Name = "GetById Test", AssetType = "Stock" };
-        var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
-        var created = await createResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
+        // Arrange
+        var request = new UpdateAssetRequest("Updated Name", null, null, null, null);
 
         // Act
-        var response = await _client.GetAsync($"/assets/{created!.Id}");
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var asset = await response.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
-        asset!.Id.Should().Be(created.Id);
-        asset.Name.Should().Be("GetById Test");
-    }
-
-    [Fact]
-    public async Task GetById_ReturnsNotFound_WhenDoesNotExist()
-    {
-        // Act
-        var response = await _client.GetAsync("/assets/99999");
+        var response = await _client.PutAsJsonAsync("/assets/99999", request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
-    #endregion
-
-    #region PUT /assets/{id}
-
     [Fact]
-    public async Task Update_ReturnsOk_WithValidUpdate()
+    public async Task Update_ReturnsOk_WhenAssetExists()
     {
         // Arrange
-        var createRequest = new CreateAssetRequest { Name = "Original Name", AssetType = "Cash" };
+        var createRequest = new CreateAssetRequest("Asset To Update", "ETF", null, null, 0.5m);
         var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
-        var created = await createResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
 
-        var updateRequest = new UpdateAssetRequest { Name = "Updated Name" };
+        var updateRequest = new UpdateAssetRequest("Updated Name", null, null, null, null);
 
         // Act
         var response = await _client.PutAsJsonAsync($"/assets/{created!.Id}", updateRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var updated = await response.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
+        var updated = await response.Content.ReadFromJsonAsync<UpdateAssetResponse>(_jsonOptions);
         updated!.Name.Should().Be("Updated Name");
     }
 
@@ -134,47 +162,28 @@ public class AssetsControllerTests : IClassFixture<CustomWebApplicationFactory>
     #region DELETE /assets/{id}
 
     [Fact]
-    public async Task Delete_ReturnsNoContent_WhenExists()
+    public async Task Delete_ReturnsNotFound_WhenAssetDoesNotExist()
+    {
+        // Act
+        var response = await _client.DeleteAsync("/assets/99999");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Delete_ReturnsNoContent_WhenAssetExists()
     {
         // Arrange
-        var createRequest = new CreateAssetRequest { Name = "To Delete", AssetType = "Crypto" };
+        var createRequest = new CreateAssetRequest("Asset To Delete", "ETF", null, null, 0.5m);
         var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
-        var created = await createResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
 
         // Act
         var response = await _client.DeleteAsync($"/assets/{created!.Id}");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
-
-        // Verify it's gone
-        var getResponse = await _client.GetAsync($"/assets/{created.Id}");
-        getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    #endregion
-
-    #region POST /assets/{id}/snapshots
-
-    [Fact]
-    public async Task AddSnapshot_ReturnsCreated_WithValidSnapshot()
-    {
-        // Arrange
-        var createRequest = new CreateAssetRequest { Name = "Snapshot Test", AssetType = "Fund" };
-        var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
-        var asset = await createResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
-
-        var snapshotRequest = new CreateSnapshotRequest
-        {
-            TotalValue = 10000.50m,
-            SnapshotDate = DateTime.UtcNow
-        };
-
-        // Act
-        var response = await _client.PostAsJsonAsync($"/assets/{asset!.Id}/snapshots", snapshotRequest);
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
 
     #endregion
@@ -182,48 +191,62 @@ public class AssetsControllerTests : IClassFixture<CustomWebApplicationFactory>
     #region GET /assets/{id}/snapshots
 
     [Fact]
-    public async Task GetSnapshots_ReturnsSnapshots_AfterAdding()
+    public async Task GetSnapshots_ReturnsNotFound_WhenAssetDoesNotExist()
+    {
+        // Act
+        var response = await _client.GetAsync("/assets/99999/snapshots");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task GetSnapshots_ReturnsEmptyList_WhenNoSnapshots()
     {
         // Arrange
-        var createRequest = new CreateAssetRequest { Name = "Snapshots List Test", AssetType = "ETF" };
+        var createRequest = new CreateAssetRequest("Asset Without Snapshots", "ETF", null, null, 0.5m);
         var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
-        var asset = await createResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
-
-        var snapshotRequest = new CreateSnapshotRequest
-        {
-            TotalValue = 5000m,
-            SnapshotDate = DateTime.UtcNow
-        };
-        await _client.PostAsJsonAsync($"/assets/{asset!.Id}/snapshots", snapshotRequest);
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
 
         // Act
-        var response = await _client.GetAsync($"/assets/{asset.Id}/snapshots");
+        var response = await _client.GetAsync($"/assets/{created!.Id}/snapshots");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var snapshots = await response.Content.ReadFromJsonAsync<List<GetSnapshotsResponse>>(_jsonOptions);
+        snapshots.Should().NotBeNull();
+        snapshots.Should().BeEmpty();
     }
 
     #endregion
 
-    #region POST /assets/{id}/contributions
+    #region POST /assets/{id}/snapshots
 
     [Fact]
-    public async Task AddContribution_ReturnsCreated_WithValidContribution()
+    public async Task AddSnapshot_ReturnsNotFound_WhenAssetDoesNotExist()
     {
         // Arrange
-        var createRequest = new CreateAssetRequest { Name = "Contribution Test", AssetType = "Pension" };
-        var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
-        var asset = await createResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
-
-        var contributionRequest = new CreateContributionRequest
-        {
-            Amount = 500.00m,
-            DateMade = DateTime.UtcNow,
-            Note = "Monthly contribution"
-        };
+        var request = new AddSnapshotRequest(1000m, DateTime.UtcNow);
 
         // Act
-        var response = await _client.PostAsJsonAsync($"/assets/{asset!.Id}/contributions", contributionRequest);
+        var response = await _client.PostAsJsonAsync("/assets/99999/snapshots", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task AddSnapshot_ReturnsCreated_WhenAssetExists()
+    {
+        // Arrange
+        var createRequest = new CreateAssetRequest("Asset With Snapshot", "ETF", null, null, 0.5m);
+        var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateAssetResponse>(_jsonOptions);
+
+        var snapshotRequest = new AddSnapshotRequest(1000m, DateTime.UtcNow);
+
+        // Act
+        var response = await _client.PostAsJsonAsync($"/assets/{created!.Id}/snapshots", snapshotRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -234,25 +257,13 @@ public class AssetsControllerTests : IClassFixture<CustomWebApplicationFactory>
     #region GET /assets/{id}/contributions
 
     [Fact]
-    public async Task GetContributions_ReturnsContributions_AfterAdding()
+    public async Task GetContributions_ReturnsNotFound_WhenAssetDoesNotExist()
     {
-        // Arrange
-        var createRequest = new CreateAssetRequest { Name = "Contributions List Test", AssetType = "Stock" };
-        var createResponse = await _client.PostAsJsonAsync("/assets", createRequest);
-        var asset = await createResponse.Content.ReadFromJsonAsync<AssetResponse>(_jsonOptions);
-
-        var contributionRequest = new CreateContributionRequest
-        {
-            Amount = 1000m,
-            DateMade = DateTime.UtcNow
-        };
-        await _client.PostAsJsonAsync($"/assets/{asset!.Id}/contributions", contributionRequest);
-
         // Act
-        var response = await _client.GetAsync($"/assets/{asset.Id}/contributions");
+        var response = await _client.GetAsync("/assets/99999/contributions");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     #endregion

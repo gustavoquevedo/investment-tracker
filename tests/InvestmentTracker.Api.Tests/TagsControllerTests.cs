@@ -2,7 +2,8 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using FluentAssertions;
-using InvestmentTracker.Api.DTOs;
+using InvestmentTracker.Api.Features.Tags.GetTags;
+using InvestmentTracker.Api.Features.Tags.CreateTag;
 using Xunit;
 
 namespace InvestmentTracker.Api.Tests;
@@ -40,18 +41,14 @@ public class TagsControllerTests : IClassFixture<CustomWebApplicationFactory>
     public async Task Create_ReturnsCreated_WithValidTag()
     {
         // Arrange
-        var request = new CreateTagRequest
-        {
-            Name = "Test Tag",
-            ColorHex = "#FF5733"
-        };
+        var request = new CreateTagRequest("Test Tag", "#FF5733");
 
         // Act
         var response = await _client.PostAsJsonAsync("/tags", request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var tag = await response.Content.ReadFromJsonAsync<TagResponse>(_jsonOptions);
+        var tag = await response.Content.ReadFromJsonAsync<CreateTagResponse>(_jsonOptions);
         tag.Should().NotBeNull();
         tag!.Name.Should().Be("Test Tag");
         tag.ColorHex.Should().Be("#FF5733");
@@ -65,9 +62,9 @@ public class TagsControllerTests : IClassFixture<CustomWebApplicationFactory>
     public async Task Delete_ReturnsNoContent_WhenExists()
     {
         // Arrange - Create a tag first
-        var createRequest = new CreateTagRequest { Name = "To Delete Tag", ColorHex = "#000000" };
+        var createRequest = new CreateTagRequest("To Delete Tag", "#000000");
         var createResponse = await _client.PostAsJsonAsync("/tags", createRequest);
-        var created = await createResponse.Content.ReadFromJsonAsync<TagResponse>(_jsonOptions);
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateTagResponse>(_jsonOptions);
 
         // Act
         var response = await _client.DeleteAsync($"/tags/{created!.Id}");
