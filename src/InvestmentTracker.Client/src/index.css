@@ -1,4 +1,36 @@
+/* Navigation */
+.main-nav {
+    display: flex;
+    gap: 0;
+    background: #fff;
+    border-bottom: 2px solid #eee;
+    padding: 0 2rem;
+}
 
+.nav-tab {
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-tab:hover {
+    color: #333;
+}
+
+.nav-tab.active {
+    color: #8884d8;
+    border-bottom-color: #8884d8;
+}
+
+.main-content {
+    flex: 1;
+}
+
+/* Dashboard */
 .dashboard {
     padding: 2rem;
     max-width: 1400px;
@@ -88,4 +120,102 @@
 .return-item .value {
     font-weight: bold;
     font-size: 1.1rem;
+}
+
+/* Assets Page */
+.assets-page {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.assets-page h1 {
+    margin-bottom: 1.5rem;
+}
+
+/* Snapshot Table */
+.snapshot-table-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.snapshot-table {
+    border-collapse: collapse;
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+
+.snapshot-table th,
+.snapshot-table td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+.snapshot-table thead th {
+    background: #f5f5f5;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.snapshot-table .sticky-col {
+    position: sticky;
+    background: #fff;
+    z-index: 2;
+}
+
+.snapshot-table thead .sticky-col {
+    background: #f5f5f5;
+    z-index: 3;
+}
+
+.snapshot-table .col-name  { left: 0; min-width: 150px; }
+.snapshot-table .col-type  { left: 150px; min-width: 70px; }
+.snapshot-table .col-ticker { left: 220px; min-width: 70px; }
+.snapshot-table .col-isin  { left: 290px; min-width: 130px; }
+.snapshot-table .col-fee   { left: 420px; min-width: 70px; }
+
+.snapshot-table .date-col {
+    text-align: right;
+    min-width: 110px;
+}
+
+.snapshot-table .date-col.latest {
+    background: #f0f0ff;
+}
+
+.snapshot-table thead .date-col.latest {
+    background: #e8e8f8;
+}
+
+.snapshot-table tbody tr:hover td {
+    background: #fafafa;
+}
+
+.snapshot-table tbody tr:hover .sticky-col {
+    background: #fafafa;
+}
+
+.snapshot-table tbody tr:hover .date-col.latest {
+    background: #ececff;
+}
+
+.snapshot-table tbody tr.selected td {
+    background: #e8e8f8;
+}
+
+.snapshot-table tbody tr.selected .sticky-col {
+    background: #e8e8f8;
+}
+
+.snapshot-table tbody tr.selected .date-col.latest {
+    background: #dcdcf5;
+}
+
+.loading {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
 }

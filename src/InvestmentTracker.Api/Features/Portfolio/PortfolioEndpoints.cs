@@ -4,6 +4,7 @@ using InvestmentTracker.Api.Features.Portfolio.GetSummary;
 using InvestmentTracker.Api.Features.Portfolio.GetHistory;
 using InvestmentTracker.Api.Features.Portfolio.GetAllocation;
 using InvestmentTracker.Api.Features.Portfolio.GetReturns;
+using InvestmentTracker.Api.Features.Portfolio.GetAssetsWithSnapshots;
 
 namespace InvestmentTracker.Api.Features.Portfolio;
 
@@ -15,5 +16,6 @@ public static class PortfolioEndpoints
         GetHistoryEndpoint.Map(app);
         GetAllocationEndpoint.Map(app);
         GetReturnsEndpoint.Map(app);
+        GetAssetsWithSnapshotsEndpoint.Map(app);
     }
 }

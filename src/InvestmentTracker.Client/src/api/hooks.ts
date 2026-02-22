@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from './client';
-import type { 
-    PortfolioSummary, 
-    PortfolioHistory, 
-    PortfolioAllocation, 
-    PortfolioReturns 
+import type {
+    PortfolioSummary,
+    PortfolioHistory,
+    PortfolioAllocation,
+    PortfolioReturns,
+    AssetWithSnapshots
 } from './types';
 
 export function usePortfolioSummary() {
@@ -41,5 +42,12 @@ export function usePortfolioReturns(asOf?: string) {
             const queryString = asOf ? `?asOf=${asOf}` : '';
             return apiClient<PortfolioReturns>(`/portfolio/returns${queryString}`);
         }
+    });
+}
+
+export function useAssetsWithSnapshots() {
+    return useQuery({
+        queryKey: ['portfolio', 'assets-with-snapshots'],
+        queryFn: () => apiClient<AssetWithSnapshots[]>('/portfolio/assets-with-snapshots')
     });
 }

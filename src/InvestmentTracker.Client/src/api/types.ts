@@ -40,3 +40,24 @@ export interface PortfolioReturns {
     mwr: number;
     periods: PeriodReturns;
 }
+
+export interface SnapshotEntry {
+    snapshotDate: string;
+    totalValue: number;
+}
+
+export interface ContributionEntry {
+    dateMade: string;
+    amount: number;
+}
+
+export interface AssetWithSnapshots {
+    id: number;
+    name: string;
+    assetType: string;
+    ticker: string | null;
+    isin: string | null;
+    feePercentagePerYear: number;
+    snapshots: SnapshotEntry[];
+    contributions: ContributionEntry[];
+}

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\InvestmentTracker.Domain\InvestmentTracker.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Data\import.csv" />
+  </ItemGroup>
+
 </Project>
